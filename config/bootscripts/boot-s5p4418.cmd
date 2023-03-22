@@ -12,11 +12,6 @@ setenv fdt_addr "0x48000000"
 setenv ramdisk_addr_r "0x49000000"
 setenv kernel_addr_r "0x4a000000"
 
-# fdtfile should come from compile-time u-boot patches
-if test -z "${fdtfile}"; then
-	setenv fdtfile "s5p6818-nanopi-m3.dtb"
-fi
-
 echo "Boot script loaded from SD card ${devnum}"
 
 if ext4load mmc ${devnum}:1 ${kernel_addr_r} ${prefix}/armbianEnv.txt; then
@@ -31,7 +26,7 @@ fi
 
 setenv bootargs "console=ttySAC0,115200n8 console=tty1 ${consoleargs}  root=${rootdev} rootwait rootfstype=${rootfstype} loglevel=${verbosity} usb-storage.quirks=${usbstoragequirks} ${extraargs}"
 
-if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dtb/nexell/s5p6818-nanopi3-rev07.dtb; then echo "Loading DTB"; fi
+if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dts/s5p4418-nanopi2-rev01.dtb; then echo "Loading DTB"; fi
 ext4load mmc ${devnum}:1 ${ramdisk_addr_r} ${prefix}uInitrd
 ext4load mmc ${devnum}:1 ${kernel_addr_r} ${prefix}Image
 booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}
