@@ -6,11 +6,15 @@
 # default values
 setenv rootdev "/dev/mmcblk2p1"
 setenv rootfstype "ext4"
-setenv verbosity "1"
+setenv verbosity "7"
 setenv bootlogo "false"
-setenv fdt_addr "0x48000000"
-setenv ramdisk_addr_r "0x49000000"
-setenv kernel_addr_r "0x4a000000"
+setenv fdt_addr "0x7a000000"
+setenv ramdisk_addr_r "0x79000000"
+setenv kernel_addr_r "0x71080000"
+
+if test -z "${fdtfile}"; then
+        setenv fdtfile "s5p4418-nanopi2.dtb"
+fi
 
 echo "Boot script loaded from SD card ${devnum}"
 
@@ -24,9 +28,9 @@ else
 	setenv consoleargs "splash=verbose ${consoleargs}"
 fi
 
-setenv bootargs "console=ttySAC0,115200n8 console=tty1 ${consoleargs}  root=${rootdev} rootwait rootfstype=${rootfstype} loglevel=${verbosity} usb-storage.quirks=${usbstoragequirks} ${extraargs}"
+setenv bootargs "console=ttyAMA0,115200n8 console=tty1 ${consoleargs}  root=${rootdev} rootwait rootfstype=${rootfstype} cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory printk.time=1 consoleblank=0 loglevel=${verbosity} usb-storage.quirks=${usbstoragequirks} ${extraargs}"
 
-if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dts/s5p4418-nanopi2-rev01.dtb; then echo "Loading DTB"; fi
+if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dtb/nexell/s5p4418-nanopi2-rev01.dtb; then echo "Loading DTB"; fi
 ext4load mmc ${devnum}:1 ${ramdisk_addr_r} ${prefix}uInitrd
 ext4load mmc ${devnum}:1 ${kernel_addr_r} ${prefix}Image
 booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}
