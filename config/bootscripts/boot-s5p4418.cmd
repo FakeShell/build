@@ -30,9 +30,9 @@ fi
 
 setenv bootargs "console=ttyAMA0,115200n8 console=tty1 ${consoleargs}  root=${rootdev} rootwait rootfstype=${rootfstype} cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory printk.time=1 consoleblank=0 loglevel=${verbosity} usb-storage.quirks=${usbstoragequirks} ${extraargs}"
 
-if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dtb/nexell/s5p4418-nanopi2-rev01.dtb; then echo "Loading DTB"; fi
+if ext4load mmc ${devnum}:1 ${fdt_addr} ${prefix}dtb/nexell/${fdtfile} || ext4load mmc 1:1 ${fdt_addr} ${prefix}dtb/s5p4418-nanopi2-rev07.dtb; then echo "Loading DTB"; fi
 ext4load mmc ${devnum}:1 ${ramdisk_addr_r} ${prefix}uInitrd
-ext4load mmc ${devnum}:1 ${kernel_addr_r} ${prefix}Image
+ext4load mmc ${devnum}:1 ${kernel_addr_r} ${prefix}zImage
 booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}
 
 # Recompile with:
